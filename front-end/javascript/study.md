@@ -339,6 +339,10 @@ console.log(Boolean(data)); // true
 2. 宿主对象，JavaScript运行环境自带的对象，如：Date等。
 3. 自定义对象
 
+#### 查找对象属性
+
+使用`in`和`hasOwnProperty`判断对象是否存在该属性名，`in`会查找原型链，`hasOwnProperty`不会查找原型链。
+
 #### 创建对象的属性运用
 
 在JavaScript中标识符必须为字符串，且只能由字母、数字、`_`和`$`组成，第一位不能为数字。但是对象的属性名用`对象[名]`的方式为对象创建属性，该属性可以为数字开头的字符串，也可以是任何数据类型，包含对象，引用是也只能通过`对象[名]`的方式引用。
@@ -379,7 +383,128 @@ let func2 = function () {};
 console.log(typeof window.func2); // undefined
 ```
 
+### 构造函数注意事项
 
+#### 新建实例的过程
+
+1. 新建空对象
+2. 空对象的原型指向构造函数的原型
+3. this指向该对象
+4. 返回该对象
+
+#### 原型链的理解
+
+每个构造函数有一个原型，用于存放实例的共用数据，原型可以通过`构造函数.prototype`访问，原型同样可以通过`原型.constructor`来访问构造函数，原型还可以通过`原型.__proto__`访问父构造函数的原型，构造函数的实例通过`实例.__proto__`访问构造函数的原型。
+
+![原型链的结构](./%E5%8E%9F%E5%9E%8B%E9%93%BE.png)
+
+#### 属性查找
+
+现在实例的属性上查找，再到原型链上查找，直到找到`Object.prototype`，没有则返回undefined。
+
+#### 构造函数实例的判断
+
+通过`实例 instanceof 构造函数`的返回值来判断该实例是否是该构造函数的实例。原理为查找该实例的原型链上能否找到构造函数的原型，找的到返回真，否则返回假。
+
+```javascript
+// 模拟instanceof执行过程
+
+let cls = function () {}
+let instance1 = new cls();
+
+function instanceOf(l, r) {
+    let chains = l.__proto__;
+    let target = r.prototype;
+    do {
+        if (chains === target) return true;
+        chains = chains.__proto__;
+    } while (chains != null);
+    return false;
+}
+
+console.log(instanceOf(instance1, cls)); // true
+```
+
+## Array注意事项
+
+### Array构造函数实例化和字面量创建的区别
+
+```javascript
+let arr = new Array(10); // [空白*10]
+let arr = [10]; // [10]
+```
+
+### length运用
+
+- `数组.length`表示数组的最后一个数据的下一位的角标，利用这个可以末尾添加元素
+
+```javascript
+let arr = [];
+for (let x = 0; x < 20; x++) {
+   arr[arr.length] = x;
+}
+console.log(arr);
+```
+
+- `数组.length`可改变，通过改变length的值达到添加或删除数据的效果。
+
+```javascript
+let arr = [1, 2, ];
+arr.length -= 1; // [1]
+arr.length += 1; // [1,,]
+```
+
+### Array.prototype.sort理解
+
+`sort`方法的参数为函数，函数有两个参数，分别是数组的前一个和后一个数据，当函数返回值大于0，前后翻转，当小于0,前后不变。
+
+```javascript
+let arr = [1,2,3,4];
+
+// 升序
+arr.sort((a, b) => a - b); // [1,2,3,4]
+
+// 降序
+arr.sort((a, b) => b - a); // [4,3,2,1]
+```
+
+## Function的注意事项
+
+### 函数默认传入的参数
+
+1. this
+2. arguments
+
+`arguments`是伪数组，包含了传入函数的实参，有`length`和代表函数本身的`callee`属性。
+
+```javascript
+function func() {
+   console.log(func === arguments.callee);
+}
+func(); // true
+```
+
+### call、bind、apply的使用
+
+都是用于改变方法的this,且执行该方法，区别call、apply立即执行，而bind返回一个函数，call和bind传入参数序列，而apply传入参数数组。
+
+```javascript
+let o = {
+   a: 1,
+   b: 2,
+   f(x1 = 0, x2 = 0) {
+      console.log(this.a + this.b + x1 + x2);
+   },
+};
+let o2 = {
+   a: 10,
+   b: 20,
+};
+
+o.f.call(o2, 30, 40); // 100
+o.f.apply(o2, [30, 40]); // 100
+o.f.bind(o2, 30, 40)(); // 100
+```
 
 ## 运算符的运用
 
@@ -566,7 +691,9 @@ function data2 () {};
   2. 可以改变this的指向（通过bind等方法）。
 - 箭头函数中this的特点
   1. 自身没有this,向上层不断查找。
-  2. 不可以改变this的指向，在箭头函数被定义时，就已经确定
+  2. 不可以改变this的指向，在箭头函数被定义时，就已经确定。
 
-```
-```
+## JavaScript中的内存管理方式
+
+1. 引用计数，无法解决循环引用
+2. 标记-清除（推荐）

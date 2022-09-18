@@ -396,7 +396,7 @@ console.log(typeof window.func2); // undefined
 
 每个构造函数有一个原型，用于存放实例的共用数据，原型可以通过`构造函数.prototype`访问，原型同样可以通过`原型.constructor`来访问构造函数，原型还可以通过`原型.__proto__`访问父构造函数的原型，构造函数的实例通过`实例.__proto__`访问构造函数的原型。
 
-![原型链的结构](./%E5%8E%9F%E5%9E%8B%E9%93%BE.png)
+![原型链的结构](./images/%E5%8E%9F%E5%9E%8B%E9%93%BE.png)
 
 #### 属性查找
 
@@ -425,7 +425,135 @@ function instanceOf(l, r) {
 console.log(instanceOf(instance1, cls)); // true
 ```
 
-## Array注意事项
+## String的注意事项
+
+### 字符串的正则表达式的方法
+
+1. search
+
+查找指定字符串或者正则表达式指定的内容所在的位置，没有返回-1
+
+2. match
+
+查找指定字符串或者正则表达式指定的内容的详情，返回的是数组。
+
+3. replace
+
+第一个参数为字符串或正则表达式，表示要被替换的内容，第二个参数为要替换的内容。
+
+4. split
+
+以指定字符串或正则表达式代表的内容进行分割。
+
+### 字符串的存储
+
+在JavaScript中，字符串底层用数组存储字符串。
+
+```javascript
+var s = 'abc';
+console.log(s.length); // 3
+console.log(s[1]); // 'b'
+```
+
+### charAt、charCodeAt、String.fromCharCode的使用
+
+charAt返回指定下标的字符，charCodeAt返回指定下标的字符的Unicode编码，String.fromCharCode返回指定Unicode编码的字符。
+
+### indexOf、lastIndexOf的使用
+
+都是用于返回指定字符的下标，第二个参数是开始的位置。indexOf从左向右查找，lastIndexOf是从右向左查找。
+
+## RegExp的注意事项
+
+### 常用语法
+
+- `{n}`，表示匹配前面字符n次
+- `{n,m}`，表示匹配前面字符n-m次
+- `{n,}`，表示匹配前面字符n次以上
+- `n?`，也即`{0,1}`
+- `n+`，也即`{1,}`
+- `n*`，也即`{0,}`
+- `.`，表示任意字符
+- `\w`，匹配字母数字下划线，相当于`[A-z0-9_]`
+- `\W`，匹配非单词，相当于`[^A-z0-9_]`
+- `\s`，匹配空白字符
+- `\S`，匹配非空白字符
+- `\d`，匹配数字，相当于`[0-9]`
+- `\D`，匹配非数字，相当于`[^0-9]`
+
+```javascript
+// \d，单词边界的理解
+let reg = /word/i;
+let s = 'myWord';
+s.match(reg); // 能匹配到myWord里的Word
+let reg2 = /\bword\b/i;
+s.match(reg2); // 不能匹配到myWord的Word，只能匹配单个word
+'word'.match(reg2); // 能匹配到word
+```
+
+### 正则表达式的创建
+
+构造函数RegExp的参数第一个是正则表达式，第二个是匹配模式。
+
+### 匹配模式
+
+1. `i`，忽略大小写
+2. `g`，全局匹配
+
+### `[^ ]`的使用
+
+匹配除了括号里的其他内容。
+
+## Math的注意事项
+
+### ceil的使用
+
+向上取整，小数位只要有值，直接进位。
+
+### round的使用
+
+四舍五入。
+
+### floor的使用
+
+向下取整，小数位直接去掉。
+
+### random的使用
+
+生成0.xxxxx的数。
+
+```javascript
+// 0-1
+Math.random();
+
+// 0-10
+
+Math.floor(Math.random() * 10);
+
+// 0-100
+
+Math.floor(Math.random() * 100);
+```
+
+## Date的注意事项
+
+### getDay的使用
+
+获取星期几，周一到周六为1-6，周天为0。
+
+### getMonth的使用
+
+获取月份，0-11。
+
+### getMiliSeconds的使用
+
+获取当前的毫秒数，0-999。
+
+### getTime和Date.now的使用
+
+获取当前时间的时间戳。
+
+## Array的注意事项
 
 ### Array构造函数实例化和字面量创建的区别
 
@@ -632,9 +760,9 @@ console.log(true == NaN, false == NaN); // false，false
 console.log(isNaN(NaN)); // true
 ```
 
-## alert和prompt
+## alert、prompt和confirm
 
-alert返回值为undefined,prompt返回值为用户输入的值。
+alert返回值为undefined,prompt返回值为用户输入的值，confirm返回布尔值。
 
 ## 语句
 
@@ -697,3 +825,305 @@ function data2 () {};
 
 1. 引用计数，无法解决循环引用
 2. 标记-清除（推荐）
+
+## 包装类的注意事项
+
+1. Number
+2. String
+3. Boolean
+
+使用上面的构造函数，可以创建对象。
+
+```javascript
+var num = 1;
+console.log(num.toString()); // '1'
+
+// 为什么可以使用方法？js中会临时将num用Number包装类包装成对象
+var numObj = new Number(num);
+console.log(numObj.toString());
+// 使用valueOf，得到原来的值
+num = numObj.valueOf();
+console.log(num);
+
+// 进一步理解
+num.a = 1; // 想设置num的a属性，num被包装成对象，设置a为1，然后num又被转为值。
+console.log(num.a); // num被包装类包装成Number对象，但是Number对象的原型上没有a属性，因此返回undefined
+
+// 有包装类的存在，使得基础数据类型能够作为类的实例访问类的原型上的方法
+```
+
+## DOM的注意事项
+
+### 节点分类
+
+- 文档节点，代表整个网页
+- 元素节点，标签
+- 属性节点，标签的属性
+- 文本节点，代表标签的文本内容
+
+### 节点的属性
+
+- nodeName
+  - 文档节点为`#document`
+  - 元素节点为标签名
+  - 属性节点为属性名
+  - 文本节点为`#text`
+- nodeType
+  - 文档节点为9
+  - 元素节点为1
+  - 属性节点为2
+  - 文本节点为3
+- nodeValue
+  - 文档节点没有值
+  - 元素节点没有值
+  - 属性节点为属性值
+  - 文本节点为文本内容
+
+### 文档节点
+
+文档节点也即doucment对象。
+
+### onload和DOMContentloaded的区别
+
+时机不同，onload会在网页全部渲染完成后触发，而DOMContentloaded会在dom渲染完成后触发。
+
+### 获取节点的方法
+
+- `document.getElementById`
+- `document.getElementsByClassName`
+- `document.getElementsByName`
+- `document.getElementsByTagName`
+- `document.querySelector`
+- `document.querySelectorAll`
+
+### 获取元素节点的子节点方法
+
+- `节点.childNodes`
+- `节点.children`
+- `节点.firstChild`
+- `节点.firstElementChild`
+- `节点.lastChild`
+- `节点.lastElementChild`
+
+### 获取父亲节点和兄弟节点
+
+- `节点.parentNode`
+- `节点.previousSibling`
+- `节点.previousElementSibling`
+- `节点.nextSibling`
+- `节点.nextElementSibling`
+
+### innerHTML和innerText
+
+- `innerHTML`用于获取HTML，`innerText`用于获取文本内容，会把内部的标签去掉，只保留文本内容。
+- `innerHTML`用于设置HTML，`innerText`用于设置文本内容，如果设置HTML,也会当作文本内容输出。
+
+### innerText和textContent的区别
+
+innerText会遵循css样式，而textContent不会。
+
+- 如果css中设置`display: none;`，innerText就不会输出被隐藏的文本，但是textContent会。
+- innerText会和浏览器一样，将空白去掉，但是textContent会原样输出。
+
+### outerHTML和innerHTML的区别
+
+`outerHTML`会获取包含自身标签的所有内容，`innerHTML`会获取除开自身标签的内部的所有内容。
+
+### innerText和outerText的区别
+
+`outerText`和`innerText`获取文本内容没有区别，设置文本内容：`outerText`会把是自身标签也覆盖，`innerText`只会覆盖除开自身标签的内容。
+
+### checked和selected属性
+
+checked用于单选框和复选框，值为真选中。selected用于下拉框，值为真选中。
+
+### document中代表元素的属性名
+
+- `document`，文档节点
+- `document.documentElement`，HTML节点
+- `document.head`，head节点
+- `document.body`，body节点
+- `document.all`，所有节点
+
+### document中代表类的属性
+
+- `document.className`，类名字符串
+- `document.classList`，类名的列表
+
+### 添加和删除事件
+
+可以使用`节点.on时间名称`设置回调，但是只能设置一个，可以使用`addEventListener`和`removeEventListener`设置和销毁多个回调函数。
+
+- `节点.addEventListener`
+- `节点.removeEventListener`
+- `节点.attachEvent`，同`addEventListener`作用，用于兼容ie8，不同于`addEventListener`，其第一个参数需要加上`on事件名称`，且没有第三个参数。
+- `节点.detachEvent`，同`removeEventListener`作用，用于兼容ie8，其他同上。
+
+### 修改节点的方法
+
+- `父节点.appendChild`
+- `父节点.removeChild`
+- `父节点.replaceChild`
+- `父节点.insertBefore`
+- `节点.setAttribute`
+- `节点.removeAttribute`
+
+### 创建节点的方法
+
+- `document.createElement`
+- `document.createAttribute`
+- `document.createTextNode`
+
+### 获取属性节点的方法
+
+`节点.getAttribute`
+
+### style、getComputedStyle和currentStyle的区别
+
+- `节点.style`为行内样式，且可以修改，`window.getComputedStyle`为所有样式，不可以修改。`window.getComputedStyle`的第二个参数用于确认是否获取的是伪元素的样式，取值为'before'、'after'、null。
+- `getComputedStyle`不兼容ie8，`currentStyle`兼容ie8,但不支持查看伪元素样式。
+
+### 其他样式的相关属性
+
+- `clientHeight`，元素的可视高度
+- `clientWidth`，元素的可视高度
+- `offsetHeight`，元素包含边框的可视高度
+- `offsetWidth`，元素包含边框的可视宽度
+- `scrollHeight`，元素的整个高度
+- `scrollWidth`，元素的整个宽度
+- `offsetParent`，元素的定位父元素，默认为`document.body`
+- `offsetTop`，元素相对其定位父元素的顶部距离
+- `offsetLeft`，元素相对其定位父元素的左侧距离
+- `clientTop`，元素的顶部边框的宽度
+- `clientLeft`，元素的左侧边框的宽度
+- `scrollTop`，元素顶部已滚动的距离
+- `scrollLeft`，元素左侧已滚动的距离
+
+![原型链的结构](./images/DOM%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A0%B7%E5%BC%8F.png)
+
+### 事件
+
+#### 事件对象
+
+##### 注意事项
+
+在ie8中，事件对象不通过函数参数形式传入，而是通过全局属性`window.event`访问。
+
+##### 相关属性
+
+`clientX`和`clientY`是相对于浏览器窗口左上角，而`pageX`和`pageY`是相对于整个文档的左上角，当文档出现滚轮是，两者有区别。
+
+- `clientX`
+- `clientY`
+- `pageX`
+- `pageY`
+
+#### 事件的冒泡和捕获
+
+##### 事件传播
+
+1. 捕获阶段
+2. 目标阶段
+3. 冒泡阶段
+
+从根元素向下捕获触发事件的最内层的target，并执行`addEventListener`第三个参数为`true`或者`{capture: true}`的事件处理函数，找到target后，向上冒泡，执行`addEventListener`第三个参数为`false`或者为空的事件处理函数。
+
+##### 启用或停止事件捕获的方法
+
+- `节点.addEventListener(事件名称，事件处理函数，true|{capture: true})`
+- `节点.setCapture()`，将所有的鼠标触发的事件进行捕获到该节点上
+- `节点.releaseCapture()`，取消捕获
+
+##### target和currentTarget
+
+由于事件有冒泡和捕获的过程，因此触发事件的不一定是最开始的那个，`target`代表触发事件最深层次的那个元素，`currentTarget`指的是当前触发事件处理函数的元素。
+
+#### 事件委派
+
+事件委派是利用事件的冒泡特性，提高代码执行效率的一种方式，可以给需要执行事件处理函数的元素的外层元素绑定该元素的事件处理函数，从而不需要给父元素的众多自元素一一进行事件绑定。
+
+#### 取消冒泡的方式
+
+- `event.stopPropagation()`
+- `[window.]event.cancelBubble = true`，用于兼容ie8
+
+#### 取消默认行为
+
+JavaScript中在事件处理函数中返回false,可以取消默认行为，jQuery的事件处理函数中可以同时取消默认行为和停止冒泡。
+
+- `event.preventDefault()`
+- `[window.]event.returnValue = false`，用于兼容ie8
+
+#### onscroll和onmousewheel的区别
+
+`onscroll`在被绑定的元素发生滚动时触发，而`onmousewheel`在鼠标滚动时触发，鼠标发生滚动并不意味着不一定被绑定元素发生滚动。
+
+#### onmousewheel和DOMMouseScroll
+
+火狐并不支持`mousewheel`事件，而是监听`DOMMouseScroll`事件。
+
+#### 获取鼠标滚轮的滚动方向
+
+- `event.wheeldelta`，大于0，向上滚
+- `event.detail`，小于0，向上滚，兼容火狐。
+
+#### 键盘事件的注意事项
+
+##### 分类
+
+- `keydown`
+- `keypress`
+- `keyup`
+
+#### `keydown`和`keypress`的区别
+
+- 区别与`keypress`，`keydown`会识别到出字母数字按键外的其他功能键，比如方向键，而`keypress`无法识别。
+- 执行顺序不同，键盘按下，`keydown` > `keypress` > `keyup`。
+
+#### 键盘事件属性注意事项
+
+`event.keyCode`和`event.which`要被废弃，推荐使用`event.key`，为按键的字符串。
+
+## BOM的注意事项
+
+### BOM分类
+
+1. `Window`
+
+`window`为全局对象。
+
+2. `Navigator`
+
+包含了浏览器客户端的信息，主要使用`navigator.userAgent`判断浏览器种类。
+
+3. `Location`
+4. `History`
+5. `Screen`
+
+### 判断浏览器的种类
+
+通过使用`navigator.userAgent`属性和个别浏览器特有的对象来判断浏览器的种类。
+
+```javascript
+// 除了ie11无法通过userAgent判断，其他都可以。ie11可以通过特有的ActiveXObject对象来判断
+
+if (navigator.userAgent.search(/chrome/i) !== -1) {
+   // Chrome
+}
+else if (navigator.userAgent.search(/safari/i) !== -1) {
+   // Safari
+}
+else if (navigator.userAgent.search(/opr|opera/i) !== -1) {
+   // Opera
+}
+else if (navigator.userAgent.search(/firefox/i)) {
+   // FireFox
+}
+else if (navigator.userAgent.search(/msie/i)) {
+   // IE
+}
+else if (ActiveXObject) {
+   // IE11
+}
+```
+

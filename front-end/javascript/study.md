@@ -345,7 +345,7 @@ console.log(Boolean(data)); // true
 
 #### 创建对象的属性运用
 
-在JavaScript中标识符必须为字符串，且只能由字母、数字、`_`和`$`组成，第一位不能为数字。但是对象的属性名用`对象[名]`的方式为对象创建属性，该属性可以为数字开头的字符串，也可以是任何数据类型，包含对象，引用是也只能通过`对象[名]`的方式引用。
+在JavaScript中标识符必须为字符串，且只能由字母、数字、`_`和`$`组成，第一位不能为数字。但是对象的属性名用`对象[名]`的方式为对象创建属性，该属性可以为数字开头的字符串，也可以是任何数据类型，包含对象，引用是也只能通过`对象[名]`的方式引用，因为除字符串以外的属性名，都会自动转换为字符串，注意任何对象转为字符串都为`[object Object]`，因此不建议用对象做对象属性名。
 
 ```javascript
 let event = {};
@@ -1001,6 +1001,20 @@ checked用于单选框和复选框，值为真选中。selected用于下拉框�
 
 ![原型链的结构](./images/DOM%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A0%B7%E5%BC%8F.png)
 
+### 操作类的注意事项
+
+- `节点.className`，返回元素的类的字符串，可以修改。
+- `节点.classList`，为类的伪数组，可以操作类名。
+  - `节点.classList.length`，返回类的数量。
+  - `节点.classList.add`，添加类名。
+  - `节点.classList.remove`，删除类名。
+  - `节点.classList.replace`，用新类名替换旧类名。
+  - `节点.classList.toggle`，用于切换类名，不存在则添加返回`true`，存在则删除返回`false`。
+  - `节点.classList.values`，返回包含类名的数组。
+  - `节点.classList.keys`，返回0 - length-1的的数组。
+  - `节点.classList.entries`，返回包含数组的下标和类名的数组。
+  - `节点.classList.contains`，检查是否有该类名。
+
 ### 事件
 
 #### 事件对象
@@ -1127,3 +1141,63 @@ else if (ActiveXObject) {
 }
 ```
 
+### History的常用属性和方法
+
+- `history.length`，保存历史记录的数量。
+- `history.forward`，向前跳转。
+- `history.back`，向后跳转。
+- `history.go`，参数为正整数，向前跳转整数个记录，参数为负数，向后跳转整数个记录。
+
+### Location的注意事项
+
+#### 常用属性
+
+- `location.protocol`，如`https:`。
+- `location.hostname`，如`www.baidu.com`。
+- `location.port`，如`:8080`。
+- `location.hash`，如`#hash`。
+- `location.pathname`，如`/video`。
+- `location.search`，如`?id=1`。
+- `location.href`，如`https://baidu.com/#hash/video?id=1`。
+- `location.host`，如`www.baidu.com:9032`。
+
+#### 常用方法
+
+- `location.reload`，重新加载页面。
+- `location.assign`，跳转其他页面，历史记录增加。
+- `location.replace`，替换当前历史记录，不会产生增加的历史记录数量。
+
+## 定时器方法
+
+### 定时器种类
+
+JavaScript中分为两种，一种只执行一次，另一种间隔执行。
+
+1. `interval`
+2. `timeout`
+
+### 定时器的设置和取消
+
+设置定时器时，会返回一个id,用作取消定时器的函数参数。
+
+- `setInterval`
+- `clearInterval`
+- `setTimeout`
+- `clearTimeout`
+
+
+## JSON对象的注意事项
+
+### JSON的分类
+
+1. 对象
+2. 数组
+
+### JSON的格式
+
+JSON的属性名必须为字符串，并且引号必须使用双引号，不能用单引号。为保证JSON字符串在其他语言的兼容性，JSON的值必须为字符串、数字、布尔值、对象、数组和Null,不能为undefined或者其他类型，否则使用`JSON.stringify`返回空对象或者对应位置被替换成`null`的数组。
+
+### JSON对象的方法
+
+1. `JSON.stringify`，对对象进行JSON化。
+2. `JSON.parse`，将JSON转变为对象。

@@ -398,4 +398,143 @@ color用于设置前景色和背景色，前景色包括字体颜色和边框颜
 - 灵活性高，可向字体一样修改样式
 - 可直接改变颜色。
 
+### font-weight属性值的注意事项
+
+可以用正整数表示粗细，也可以用字面量表示。
+
+- `normal`，400。
+- `bold`，700。
+
+## text-align的文字对齐方式
+
+由于单词长度过长，不能在一行放下而出现换行，导致每行文字没有填满而产生空白区域。
+
+- `left`，左对齐。
+- `right`，右对齐。
+- `justify`，两端对齐。
+- `center`，中间对齐。
+
+## vertical-align的注意事项
+
+控制内联元素和表格单元格内容的垂直对齐方式。
+
+- `top`，顶端对齐。
+- `middle`，中端对齐。
+- `baseline`，基线对齐。
+- `bottom`，底部对齐。
+- 整数，相对基线的对齐（对齐基线为0），上为正，下为负。
+- 百分数，同整数一样相对基线对齐，百分数参照行高。
+
+## text-decoration的注意事项
+
+### text-decoration的作用
+
+可以设置不同位置的多条线的统一样式，如位置、颜色、样式
+
+### text-decoration-line的分类
+
+1. `overline`，顶部的线。
+2. `line-through`，中间的线。
+3. `underline`，底部的线。
+
+### text-decoration-color的作用
+
+指定线的颜色。
+
+### text-decoration-style的分类
+
+1. `wavy`，波浪线。
+2. `solid`，实线。
+3. `daashed`，虚线。
+
+### text-decoration-thickness的作用
+
+设置线的粗细。
+
+## white-space、word-break、overflow-wrap（word-wrap）的区别
+
+- white-space，控制空白字符的显示，同时还能控制是否自动换行。它有五个值：normal | nowrap | pre | pre-wrap | pre-line。
+- word-break，控制单词如何被拆分换行。它有三个值：normal | break-all | keep-all。
+- word-wrap（overflow-wrap）控制长度超过一行的单词是否被拆分换行，是word-break的补充，它有两个值：normal | break-word。
+
+## initital、inherit、unset、revert、all的区别
+
+- `initial`，设置为CSS属性的默认值。
+- `inherit`，继承父元素的同名属性的值。
+- `unset`，属性可继承则同`inherit`，不可继承则同`initial`。
+- `revert`，恢复成浏览器默认设置的样式。
+- `all`，是一个属性，值有`initial`、`inherit`、`unset`和`revert`，可以将选择器中的所以属性统一设置值。
+
+## background的设置
+
+### background-repeat的作用
+
+- `repeat`，图片在水平和垂直方向都重复。
+- `repeat-x`，图片只在水平方向重复。
+- `repeat-y`，图片只在垂直方向重复。
+
+### background-attachment的作用
+
+- `local`，滚动时，图片粘在文字上。
+- `scroll`，滚动时，图片粘在元素上。
+- `fixed`，滚动时，图片粘在视口上。
+
+### background-origin的作用
+
+除了没有`text`属性，其他的同`background-clip`。
+
+### background-clip的作用
+
+- `border-box`，图片裁剪到border。
+- `padding-box`，图片裁剪到padding。
+- `content-box`，图片裁剪到content。
+- `text`，图片裁剪到文字，要显示出来要设置`color: transparent`。
+
+### background-position的作用
+
+- 只有一个参数，设置对应方向，另一个方向为`center`。
+- 两个参数，设置对应两个方向的值。
+
+### background-size的作用
+
+- 只有一个参数。
+  - 为数值，设置宽，高为`auto`。
+  - 为`cover`，将图片铺满。
+  - 为`contain`，将图片完整显示。
+- 两个参数分别设置宽和高。
+
+### background的写法
+
+`background: background-color background-image background-repeat background-position/background-size background-origin background-clip background-attachment`。
+
+- `background-postion/background-size`，用`/`隔开。
+- `background-origin`必须写在`background-clip`前面。
+
+## 线性渐变的注意事项
+
+### 使用范围
+
+只能在图片上设置，也即只能在`background`或`background-image`上设置。
+
+### 书写方式
+
+`background[-image]: linear-gradient([方向，]多个颜色简便值)`。
+
+### 方向表示方法
+
+1. 不写，默认从上至下。
+2. `to`加上单个或组合`top`、`left`、`right`、`bottom`。
+3. `度数deg`，顺时针转动，表示渐变方向的终点，如`0deg`表示从下至上渐变。
+4. `数字turn`，顺时针转动，表示转动的圈数。
+
+## 径向渐变的注意事项
+
+### 使用范围
+
+只能在图片上设置，也即只能在`background`或`background-image`上设置。
+
+### 书写方式
+
+`background[-image]: radial-gradient([径向渐变大小][at 方向，]多个颜色简便值)`。
+
 

@@ -537,4 +537,111 @@ color用于设置前景色和背景色，前景色包括字体颜色和边框颜
 
 `background[-image]: radial-gradient([径向渐变大小][at 方向，]多个颜色简便值)`。
 
+## 表格样式的注意事项
+
+- `border-space`，用于调整表格边框和单元格边框之间的距离。`border-collapse: collapse`会让`border-space`失效。
+- `border-collapse`，用于合并表格边框和单元格边框,使用单元格边框的样式，去掉表格边框的样式。
+- `table-layout`，有`auto`和`fixed`两个值。表格布局有两种算法，第一种列的宽度由列的最大的单元格动态决定。第二种列的宽度由列的第一个单元格宽度决定。第二种算法可以加速渲染。
+
+## 过渡的注意事项
+
+### 过渡的设置
+
+- `transition-property`，过渡的属性，必须是可以变化的数值，比如属性值为`margin：0 auto`变化到`margin: 0 70px`就不可以使用过渡，因为`auto`不是可变化的值。不指定属性名，可以使用`all`。
+- `transiition-duration`，过渡的时间，
+- `transition-timing-function`，过渡的速度变化，可以使用`cubic-bezier`曲线函数。
+- `transition-delay`，过渡的延迟时间。
+- `transition`，过渡的总写方式，不管是总写还是分开写，需要写多个过渡属性的，用逗号隔开。
+
+### 可以使用过渡的属性
+
+必须是个可以变化的值，否则不生效。
+
+### transition-timing-function常用的属性值
+
+- `linear`,匀速。
+- `ease`，慢速开始和慢速结束。
+- `ease-in`，慢速开始。
+- `ease-out`，慢速结束。
+- `ease-in-out`，同`ease`类似。
+- `cubic-bezier(x,y,x2,y2)`函数。
+- `steps`，第一个参数为分几步完成，第二个参数为是每步的开始还是结束显示，默认为结束。
+
+## 动画的注意事项
+
+### 动画的设置
+
+- `animation-name`，动画的名称。
+- `animation-duration`，动画时间。
+- `animation-timing-function`，动画的速度变化，类似过渡。
+- `animation-delay`，动画的延迟。
+- `animation-iteration-time`，动画次数，`infinate`表示无限循环。
+- `animation-direction`，动画方向，`normal`默认值，从`to`到`from`，`reverse`从`from`到`to`。`alteranate`从`to`到`from`，从`from`到`to`循环。`alternative-reverse`从`from`到`to`，从`to`到`from`循环。
+- `animation-fill-mode`，`none`为默认，`backwards`表示在等待动画的时候用第一帧的样式，`forwards`动画结束后，用最后一帧的样式，`both`表示`backwards`和`forwards`同时生效。[详细看这里](https://www.cnblogs.com/lyzg/p/5738860.html)
+- `animation-play-state`，控制动画的运动状态，`paused`表示动画暂停，`running`表示动画启动。
+
+### 动画的书写形式
+
+1. 动画的声明
+
+```css
+@keyframes animate {
+  0% /* 也可以写成from */ {}
+  25% {}
+  /* ... */
+  100% /* 也可以写成to */ {}
+}
+
+.animate {
+  /* animation: 动画名称 持续时间 延迟时间 时间函数 动画次数 动画方向 动画状态 */;
+}
+```
+
+## transform的注意事项
+
+### 百分比单位的使用
+
+相对于自身，`left`、`top`这些是相对于定位父元素。
+
+### 坐标系的使用
+
+- x轴从左往右，为负数到正数。
+- y轴从上至下，为负数到正数。
+- z轴从内向外，为负数到正数。
+
+### transform的类型
+
+- translate，平移。
+- rotate，旋转。
+- scale,伸缩。
+- skew，歪斜。
+
+### transform-origin的使用
+
+调整变换原点的位置。
+
+## 多个变换的注意事项
+
+当书写多个变换时，用空格隔开，且变换有顺序，为书写的顺序。
+
+## backface-visibility的使用
+
+当页面具有3的效果时，对元素进行翻转，并看不到元素后面的内容，可以通过设置`backface-visibility: visible`来达到这个效果。
+
+## perspective的使用
+
+为了让元素z轴放大缩小，有近大远小的效果，可以使用`perspective`调整观察者的视角距离。
+
+## perspective-origin的使用
+
+调整观察者的位置。
+
+## CSS变量的使用
+
+- 设置变量，`--变量名`。
+- 使用变量，`var(变量名)`。
+
+## CSS计算函数的使用
+
+使用`calc(表达式)`可以计算数据返回计算后的值。
 

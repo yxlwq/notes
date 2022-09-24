@@ -645,3 +645,159 @@ color用于设置前景色和背景色，前景色包括字体颜色和边框颜
 
 使用`calc(表达式)`可以计算数据返回计算后的值。
 
+## 弹性盒模型布局的使用
+
+### 哪些元素可以使用弹性盒模型？
+
+块状元素（`display: flex`）和内联元素（`display: inline-flex`）都可以。
+
+### 使用注意事项
+
+- 父元素定位弹性盒子后，子元素的`float`、`clear`和`vertical-align`将失效。
+- 被定义为弹性盒的父元素被称为`Flex的容器`，子元素被称为`Flex的项目`。
+- `Flex盒子`内有两个轴，一个是水平的主轴，另一个是垂直的交叉轴。
+
+### 常用的属性
+
+#### 属性分类
+
+1. 只用于容器上的属性。
+
+  1. `flex-direction`，定义主轴的方向。
+  2. `flex-wrap`，默认情况，所有项目都仅在一个行上，该属性定义项目一行放不下时，如何换行。
+  3. `flex-flow`，组合了`flex-direction`和`flex-wrap`。
+  4. `justify-content`，定义了主轴上项目的排列方式。
+  5. `align-items`，定义了项目在交叉轴上的的排列方式。
+  6. `align-content`，定义了多根轴线（多个项目占据多行时，交叉轴上）的排列方式，如果只有一条轴线不起效果。
+
+2. 只用于项目上的属性。
+   1. `order`，定义项目的排列顺序，为整数，从左至右，从小至大（默认值为0）。
+   2. `flex-grow`，定义了项目总长小于主轴长度时，项目在主轴上的放大比例（默认值为0,即不放大）。
+   3. `flex-shrink`，定义了当项目总长大于主轴长度时，项目在主轴上的缩小比例（默认值为1,即等比例缩小），
+   4. `flex-basis`，定义了在分配剩余空间之前，项目占据主轴长度的多少（默认值为auto，即项目本来的大小）。
+   5. `flex`，组合了`flex-grow`、`flex-shrink`和`flex-basis`，书写形式为`flex: <flex-grow> <flex-shrink> || <flex-basis>`，默认值为`flex: 0 1 auto`;有两个特殊属性`none`和`auto`，`none`为`0 0 auto`，`auto`为`1 1 auto`。
+   6. `align-self`，定义了项目在交叉轴上的对齐方式，默认值为`auto`，即继承容器中`align-items`定义的属性值。其他属性同`align-items`。
+
+#### flex-direction的属性值
+
+1. `row`，从左至右（默认值）。
+2. `row-reverse`，从右至左。
+3. `column`，从上至下。
+4. `column-reverse`，从下至上。
+
+#### flex-wrap的属性值
+
+1. `nowrap`，不换行（默认值）。
+2. `wrap`，在下面起新行。
+3. `wrap-reverse`，在上面起新行。
+
+#### flex-flow的书写方式
+
+`flex-flow: <flex-direction> || <flex-wrap>`，默认值为`flex-flow: row nowrap`;
+
+#### justify-content的属性值（align-content类似）
+
+1. `flex-start`，主轴的开始（默认值）。
+2. `center`，主轴的中间。
+3. `flex-end`，主轴的末尾。
+4. `space-between`，两端对齐。
+5. `space-around`，每个项目的两侧空白等距。
+6. `space-evenly`，`evenly`为平均的含义，不同于`space-around`，`space-evenly`让项目之间的空白等距。
+
+#### align-items的属性值
+
+1. `flex-start`，交叉轴的开始。
+2. `center`，交叉轴的中间。
+3. `baseline`，根据文字的基线对齐。
+4. `flex-end`，交叉轴的末尾。
+5. `stretch`，沿交叉轴上下拉伸铺满（默认值）。
+
+
+## 网格布局的使用
+
+### 弹性盒模型布局和网格布局的区别
+
+网格布局可看成一维布局，利用主轴进行布局，网格布局可看成二维布局，利用行和列产生的单元格进行布局。
+
+### 哪些元素可以使用弹性盒模型？
+
+块状元素（`display: grid`）和内联元素（`display: inline-grid`）都可以。
+
+### 网格的形成
+
+由行和列交叉构成网格，`n`行和`m`列可以组成`n * m`个单元格的表格，等价于`n+1`个行线和`m+1`个列线组成。
+
+### 使用注意事项
+
+- 网格布局的父元素叫容器，子元素叫项目。
+- 同弹性盒模型布局，网格布局的属性分为容器属性和项目属性。
+
+### 容器属性
+
+1. `display: grid || inline-grid`，定义当前元素为网格布局的容器。
+2. `grid-template-columns`，定义列宽。
+3. `grid-template-rows`，定义行高。
+4. `grid-auto-columns`和`grid-auto-rows`同上，也是指定列宽和行高的，但是作用于当指定单元格不在生成的单元格中时，自动生成的单元格列宽和行高，不指明的情况下，自动生成的网格的列宽和行高为前两条指定的。
+5. `grid-template-areas`，定义单元格区域名称，指定单元格后，网格线会自动命名，如`grid-template-areas: header header header`,则起始网格线名`header-start`，末尾网格线名`header-end`。
+6. `grid-auto-flow`，定义了网格布局中项目的填充方式，默认值为`row`，从左至右，从上至下填充项目，`column`，从上至下，从左至右，`row dense`和`column dense`，定义了当项目不够排列一行时，换行导致上一行留下的空白的填充方式，`column`和`row`会不进行填充，按顺序排列，而加上`dense`后，会让后面够小的项目填充到前面。
+7. `row-gap`，定义行之间的间距。
+8. `column-gap`，定义列之间的间距。
+9. `gap`，组合`row-gap`和`column-gap`，格式`gap: <row-gap> <column-gap>`，如果只写一个值则默认为行间距和列间距的值。
+10. `justify-items`定义了单元格项目中内容的水平排列方式（列的排列方式），`align-items`定义了单元格项目中内容的垂直排列方式（行的排列方式），`place-items`组合了`align-items`和`justify-items`，书写方式`place-items: <align-items> || <justify-items>`，当只有一个值时，表示为`align-items`和`justify-items`的值。属性值有`start`、`center`、`end`、`stretch`。
+11. `justify-content`、`align-items`和`place-content`类似上一条，但是表示的是所有单元个在容器中的排列，多了几个属性：`space-between`、`space-around`、`space-evenly`。
+12. `grid-template`组合了`grid-template-columns`、`grid-template-rows`和`grid-template-areas`，但是不容易书写。，不推荐。
+13. `grid`同上，组合了所有的属性，不利于书写，不推荐。
+
+### 项目属性
+
+- `grid-row-start`，指定单元格的水平起始线位置或名称，可以使用`span 单元格位置`，表示跨一个格子。
+- `grid-row-end`，指定单元格的水平终止线位置或名称，可以使用`span 单元格位置`，同`grid-row-start: span 单元格位置`效果一样。
+- `grid-row`，指定单元格的水平起始线和终止线的位置，格式`grid-row: <grid-row-start>[ / <grid-row-end>]`。可以省略斜杠后的值，默认跨一个单元格，同样可以给`<grid-row-end>`写为`span 单元格位置`表示跨几个单元格。
+- `grid-column-start`，指定单元格的垂直起始线位置或名称，可以使用`span 单元格位置`，表示跨一个格子。
+- `grid-column-end`，指定单元格的垂直终止线位置或名称，可以使用`span 单元格位置`，同`grid-column-start: span 单元格位置`效果一样。
+- `grid-column`，指定单元格的垂直起始线和终止线的位置，格式`grid-column: <grid-column-start>[ / <grid-column-end>]`。可以省略斜杠后的值，默认跨一个单元格，同样可以给`<grid-column-end>`写为`span 单元格位置`表示跨几个单元格。
+- `grid-area`，用于指定当前的项目位于容器下哪个区域，可以使用区域名指定或位置名称指定。格式`grid-area: <区域名称> || grid-row-start> / <grid-column-start> / <grid-row-end> / <grid-column-end>;`
+- `justify-self`、`align-self`和`place-self`用于设置项目内容的排列方式，不设置则继承`justify-items`、`align-items`和`place-items`的样式设置。
+
+### repeat函数的使用
+
+在定义很多网格时，可以使用`repeat`函数避免重复书写，格式`repeat(重复次数，值 || 多个值)`。重复的次数可以使用`auto-fill`来自动填充。
+
+### fr的使用
+
+`fr`也即`fraction 片段`，例如`grid-template-columns: repeat(10, 1fr 2fr)`，表示后一个列宽是前一个列宽的两倍，重复十次。
+
+### minmax函数的使用
+
+定义列宽或行高的区间，格式`minmax(100px, 1fr)`，表示最小值100px，最大值1fr。
+
+### auto关键字
+
+表示浏览器来决定列宽和行高的大小，如`grid-template-columns: 100px auto 100px`，表示左右列宽100px,中间的宽度自适应。
+
+### 指定网格线名称的方式
+
+- 可以在`grid-template-columns || grid-template-rows`中在设置列宽或行高的同时，通过`[网格线名称[ 网格线名称2 网格线名称3 ...]]`的方式，设置网格线的名称，方便以后使用
+
+  1. `grid-template-columns: [title-start] 100px [title-end content-start] 200px [content-end] `
+  2. `grid-template-rows: [title-start] 100px [title-end content-start] 200px [content-end] `
+
+- 通过`grid-template-areas`指定单元格区域名时，自动命名。
+
+## CSS像素和视口的相关问题
+
+CSS的像素是一个相对值，在不同的设备上有不同的`devicePixelRatio`，而视口被定位为三种：布局视口、视觉视口和理想视口。
+
+[详细见此](https://github.com/jawil/blog/issues/21)
+
+## vw和vh的理解
+
+vw和vh是相对于视觉视口来定义的，`100vw`等于视觉视口的宽度，`100vh`等于视觉视口的高度。
+
+## 网页的字体大小问题
+
+网页中最小的网页字体为`12px`。
+
+## 媒体查询的使用
+
+[详细见此](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Media_Queries/Using_media_queries)
